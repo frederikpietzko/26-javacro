@@ -1,0 +1,354 @@
+:root {
+    --fundamentals-purple: #7954f6;
+    --fundamentals-pink: #eb55e6;
+    --fundamentals-ink: #1f2023;
+    --drawn-annotation-color: var(--fundamentals-purple, #7954f6);
+    --code-window-columns: 80;
+}
+
+html.dark {
+    --fundamentals-ink: #f4f2f7;
+}
+
+.presentation-cover {
+    --cover-text-width: 62%;
+}
+
+.presentation-cover h1 {
+    max-width: none; white-space: nowrap; font-size: 5.2rem !important;
+    /* The theme's `leading-20` (5rem) is shorter than this headline's font
+       size, so descenders such as the "g" fall outside the line box and get
+       clipped. Give the line enough room and a little breathing space below. */
+    line-height: 1.2; padding-bottom: 0.12em;
+    background: linear-gradient(120deg, var(--fundamentals-purple), var(--fundamentals-pink));
+    background-clip: text; -webkit-background-clip: text; color: transparent;
+}
+
+.presentation-cover h2 { font-size: 2rem; }
+.kodee-character { z-index: 0; }
+
+/* Section intro slides (`layout: intro` + `class: section-intro`).
+   Reusable opener for every section: bold gradient headline, muted subtitle
+   and a short accent rule. Sized so a typical section title stays on one
+   line; longer titles wrap into balanced lines instead of overflowing.
+   Override per slide with `--section-intro-title-size` if needed. */
+.section-intro {
+    /* No featured mascot on these slides, so the text column may be wide. */
+    --cover-text-width: 85%;
+    --section-intro-title-size: 3.4rem;
+}
+
+.section-intro h1 {
+    font-size: var(--section-intro-title-size) !important;
+    line-height: 1.2;
+    padding-bottom: 0.12em;
+    font-weight: 800;
+    max-width: none;
+    text-wrap: balance;
+    background: linear-gradient(120deg, var(--fundamentals-purple), var(--fundamentals-pink));
+    background-clip: text; -webkit-background-clip: text; color: transparent;
+}
+
+.section-intro h1::after {
+    content: '';
+    display: block;
+    width: 6rem;
+    height: 0.35rem;
+    margin-top: 1.25rem;
+    border-radius: 999px;
+    background: linear-gradient(120deg, var(--fundamentals-purple), var(--fundamentals-pink));
+}
+
+.section-intro h2 {
+    margin-top: 1.5rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    opacity: 0.75;
+}
+
+/* Code slides (`class: code-slide`): a headline sitting directly on top of a
+   code window looks cramped, so give the title some breathing room before the
+   first code block. */
+.code-slide h1 {
+    margin-bottom: 2.25rem;
+}
+
+.code-slide h1 + pre,
+.code-slide h1 + .slidev-code-wrapper,
+.code-slide h1 + .code-window {
+    margin-top: 0;
+}
+
+/* Two code windows stacked on one code slide (e.g. the snippet plus its query
+   log) need a visible gap so they don't read as a single block.
+   `!important` is required: Slidev itself sets
+   `.slidev-code-wrapper { margin: var(--slidev-code-margin) !important }`,
+   which silently wins over any plain rule here. Padding would work too, but
+   the language badge is absolutely positioned against the wrapper and would
+   then float above the editor. */
+.code-slide .slidev-code-wrapper ~ .slidev-code-wrapper {
+    margin-top: 3rem !important;
+}
+
+/* Click-revealed query log: same gap as a plain second code window (the
+   wrapper is nested in this div, so the sibling rule above no longer
+   applies), plus a short fade-and-rise when the click reveals it. */
+.code-slide .reveal-log {
+    margin-top: 3rem;
+}
+
+.reveal-log {
+    transition: opacity 350ms ease, transform 350ms ease;
+}
+
+.reveal-log.slidev-vclick-hidden {
+    opacity: 0;
+    transform: translateY(1rem);
+}
+
+/* Diagram slides (`class: bridge-slide`): the headline is a full sentence and
+   the diagram below it needs the vertical space, so the title is a touch
+   smaller than a code slide's and sits tighter above its content. */
+.bridge-slide h1 {
+    font-size: 2.1rem !important;
+    line-height: 1.2;
+    max-width: none;
+    text-wrap: balance;
+    margin-bottom: 0.25rem;
+}
+
+/* Pipeline slides (`class: pipeline-slide`): same treatment as the bridge
+   diagram - a full-sentence headline over a <MigrationPipeline>, so the title
+   is smaller than a section opener and sits tight above the diagram. */
+.pipeline-slide h1 {
+    font-size: 2.1rem !important;
+    line-height: 1.2;
+    max-width: none;
+    text-wrap: balance;
+    margin-bottom: 0.25rem;
+}
+
+/* Module slides (`class: module-slide`): a full-sentence headline over a
+   <ModuleList>. Same treatment as the diagram slide - the title is a
+   statement, so it is smaller than a section opener and sits tight above the
+   list. The list's own size is a variable so a longer list can shrink
+   per slide without touching the component. */
+.module-slide h1 {
+    font-size: 2.1rem !important;
+    line-height: 1.2;
+    max-width: none;
+    text-wrap: balance;
+    margin-bottom: 0.25rem;
+}
+
+.module-slide {
+    --module-list-font-size: 1.8rem;
+}
+
+/* Wishlist slide (`class: wishlist-slide`): the closing "what I want instead"
+   slide is a 2x2 grid of short statements, not a bullet list - each card
+   carries a gradient numeral and fades in on its own click. Like every other
+   content slide the title stays at the top; the cards are sized to fill the
+   space instead of centering the block. */
+.wishlist-slide h1 {
+    font-size: 2.1rem !important;
+    line-height: 1.2;
+    max-width: none;
+    text-wrap: balance;
+    margin-bottom: 0.25rem;
+}
+
+.wishlist {
+    counter-reset: wish;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.6rem;
+    margin-top: 2.6rem;
+}
+
+.wishlist .wish {
+    counter-increment: wish;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    min-height: 7rem;
+    padding: 1.5rem 1.7rem;
+    border-radius: 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--fundamentals-purple) 25%, transparent);
+    background: color-mix(in srgb, var(--fundamentals-purple) 7%, transparent);
+    font-size: 1.55rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-wrap: balance;
+    /* Slidev only animates the opacity of a reveal, so the rise has to be
+       declared here. */
+    transition: opacity 350ms ease, transform 350ms ease;
+}
+
+.wishlist .wish.slidev-vclick-hidden {
+    opacity: 0;
+    transform: translateY(0.75rem);
+}
+
+.wishlist .wish::before {
+    content: counter(wish, decimal-leading-zero);
+    flex: none;
+    font-size: 2rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    background: linear-gradient(120deg, var(--fundamentals-purple), var(--fundamentals-pink));
+    background-clip: text; -webkit-background-clip: text; color: transparent;
+}
+
+/* Verdict slide (`class: verdict-slide`): the DSL-vs-DAO closer. Two cards
+   side by side instead of a bullet list, plus a full-width footer stating
+   that the two are not exclusive. Each part fades in on its own click. */
+.verdict-slide h1 {
+    font-size: 2.1rem !important;
+    line-height: 1.2;
+    max-width: none;
+    text-wrap: balance;
+    margin-bottom: 0.25rem;
+}
+
+.verdict {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+    margin-top: 4rem;
+}
+
+.verdict-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.2rem;
+    min-height: 19rem;
+    padding: 2.2rem 2.4rem;
+    border-radius: 0.9rem;
+    border: 1px solid color-mix(in srgb, var(--fundamentals-purple) 25%, transparent);
+    background: color-mix(in srgb, var(--fundamentals-purple) 7%, transparent);
+}
+
+.verdict-card h3 {
+    margin: 0;
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    background: linear-gradient(120deg, var(--fundamentals-purple), var(--fundamentals-pink));
+    background-clip: text; -webkit-background-clip: text; color: transparent;
+}
+
+.verdict-card p {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.3;
+    text-wrap: balance;
+}
+
+.verdict-footer {
+    margin-top: 3.5rem;
+    padding: 1.6rem 1.8rem;
+    border-radius: 0.9rem;
+    border: 1px dashed color-mix(in srgb, var(--fundamentals-purple) 35%, transparent);
+    font-size: 1.6rem;
+    font-weight: 700;
+    text-align: center;
+    text-wrap: balance;
+}
+
+/* Slidev only animates the opacity of a reveal, so the rise has to be
+   declared here. */
+.verdict-card,
+.verdict-footer {
+    transition: opacity 350ms ease, transform 350ms ease;
+}
+
+.verdict-card.slidev-vclick-hidden,
+.verdict-footer.slidev-vclick-hidden {
+    opacity: 0;
+    transform: translateY(0.75rem);
+}
+
+/* Closing Q&A slide (`class: section-intro qa-slide`): the headline keeps the
+   section-opener look, the QR code plus its caption sit centered on the
+   slide. The SVG is black on white, so it needs its own white plate to stay
+   scannable in dark mode. */
+.qa-slide {
+    /* The QR sits in the middle, so the text column stays narrow. */
+    --cover-text-width: 55%;
+}
+
+.qa-slide .qa-qr-block {
+    position: absolute;
+    /* Centered horizontally and vertically on the slide. */
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.qa-slide .qa-qr {
+    width: 18rem;
+    height: auto;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: #fff;
+    box-shadow: 0 0 0 1px color-mix(in srgb, var(--fundamentals-purple) 35%, transparent);
+}
+
+.qa-slide .qa-qr-caption {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Agenda slide: the ordered list becomes a numbered index — two-digit
+   gradient numerals with a hairline rule between the entries. */
+.agenda {
+    /* A little wider than the theme's 48%: the entries are single lines and
+       still stay clear of the featured mascot. */
+    --cover-text-width: 66%;
+}
+
+.agenda ol {
+    counter-reset: agenda;
+    list-style: none;
+    padding: 0;
+    margin: 2rem 0 0;
+}
+
+.agenda ol li {
+    counter-increment: agenda;
+    display: flex;
+    align-items: baseline;
+    gap: 2.75rem;
+    padding: 0.65rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+    border-bottom: 1px solid color-mix(in srgb, var(--fundamentals-purple) 25%, transparent);
+}
+
+.agenda ol li:last-child {
+    border-bottom: none;
+}
+
+.agenda ol li::before {
+    content: counter(agenda, decimal-leading-zero);
+    flex: none;
+    min-width: 2.2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    background: linear-gradient(120deg, var(--fundamentals-purple), var(--fundamentals-pink));
+    background-clip: text; -webkit-background-clip: text; color: transparent;
+}
