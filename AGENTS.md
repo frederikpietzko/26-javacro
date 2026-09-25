@@ -24,17 +24,17 @@ records **how the author wants slides to look and read** — the preferences tha
 - Titles must be **self-explanatory statements**, not labels. `Before ORMs: every query was
   plumbing` — not `1999`. A reader should know what the slide argues from the title alone.
 - Never end a section with an "apology" or "fair and balanced" summary slide. End on the
-  strongest concrete slide and put the handover into its notes.
+  strongest concrete slide.
 
 ## Speaker notes
 
 - Every content slide has an HTML-comment note block.
-- Notes are **`-` bullet lists with sub-bullets**, never prose paragraphs — they have to be
-  skimmable on stage.
-- Notes carry: the framing, the history/context, the punchline to say out loud, what *not* to
-  explain twice, questions to ask the room, and the handover to the next slide/section.
-- Write them in the author's first person voice ("say it out loud", "point at the return type",
-  "ask the room").
+- Notes are **very short `-` bullet fragments with sub-bullets** - only the points to touch on,
+  no whole sentences, no prose paragraphs - they have to be skimmable on stage.
+- No director's notes: no "say it out loud", "point at", "ask the room", "handover", "do not
+  dwell", "honest note" and similar stage directions.
+- Every `v-click` / code-highlight step on the slide needs exactly one matching `[click]` marker
+  in the notes, one marker per line.
 - Use plain hyphens instead of em dashes and avoid special characters in notes.
 
 ## Code snippets
