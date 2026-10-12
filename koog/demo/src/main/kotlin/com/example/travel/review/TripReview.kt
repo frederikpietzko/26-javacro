@@ -9,8 +9,6 @@ import java.time.Instant
 class TripReview(
     val tripId: Long,
     @Enumerated(EnumType.STRING)
-    val agent: ReviewAgent,
-    @Enumerated(EnumType.STRING)
     val verdict: Verdict?,
     @Column(length = 4000)
     val summary: String,

@@ -38,7 +38,7 @@ Content-Type: application/json
   "arrival": "2026-12-16T16:12:00", "travelClass": "FIRST", "price": 12.00 }
 
 ### Submit for review
-POST localhost:8080/api/trips/2/submit?agent=KOOG
+POST localhost:8080/api/trips/2/submit
 
 ### Review results
 GET localhost:8080/api/trips/2/reviews

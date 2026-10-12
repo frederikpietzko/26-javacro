@@ -1,4 +1,4 @@
-package com.example.travel.review.koog
+package com.example.travel.review
 
 import ai.koog.prompt.executor.llms.MultiLLMPromptExecutor
 import ai.koog.prompt.executor.model.PromptExecutor

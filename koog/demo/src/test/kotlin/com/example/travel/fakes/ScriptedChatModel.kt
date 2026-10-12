@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList
  * all other prompts get the next scripted reviewer answer. When a script runs dry the last entry is repeated.
  *
  * Koog's subgraphs expect the result as a call of their finish tool. Whenever that tool is offered,
- * a scripted JSON answer is sent as that tool call instead - so every agent shares the same scripts.
+ * a scripted JSON answer is sent as that tool call instead.
  */
 class ScriptedChatModel : ChatModel {
 
@@ -72,7 +72,7 @@ class ScriptedChatModel : ChatModel {
     private fun AssistantMessage.asFinishToolCallIfOffered(prompt: Prompt): AssistantMessage {
         val json = text.orEmpty().trim()
         if (toolCalls.isNotEmpty() || !json.startsWith("{") || !prompt.offersTool(KOOG_FINISH_TOOL)) return this
-        // Koog's verification subgraph calls the verdict isCorrect, the shared Judgement calls it accepted
+        // Koog's verification subgraph calls the verdict isCorrect, Judgement calls it accepted
         val result = if (prompt.isJudge()) json.replace("\"accepted\"", "\"isCorrect\"") else json
         return toolCall(KOOG_FINISH_TOOL, """{"result": $result}""")
     }

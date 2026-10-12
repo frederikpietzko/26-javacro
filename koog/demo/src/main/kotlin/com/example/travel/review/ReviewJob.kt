@@ -9,33 +9,30 @@ import org.springframework.transaction.event.TransactionalEventListener
 
 /**
  * The asynchronous review stage: runs after the submit transaction commits,
- * hands the trip to the selected agent and records the outcome.
- * Without a [TripReviewer] bean for the agent the review is recorded as failed.
+ * hands the trip to the [TripReviewAgent] and records the outcome.
  */
 @Component
 class ReviewJob(
-    reviewers: List<TripReviewer>,
+    private val agent: TripReviewAgent,
     private val trips: TripService,
     private val reviews: TripReviewRepository,
 ) {
     private val log = LoggerFactory.getLogger(javaClass)
-    private val reviewers = reviewers.associateBy { it.agent }
 
     @Async
     @TransactionalEventListener
     fun on(event: TripSubmitted) {
         trips.updateStatus(event.tripId, TripStatus.IN_REVIEW)
         val started = System.currentTimeMillis()
-        log.info("Reviewing trip {} with {}", event.tripId, event.agent)
+        log.info("Reviewing trip {}", event.tripId)
 
-        val review = runCatching { reviewers.getValue(event.agent).review(event.tripId) }
-            .onFailure { log.error("Review of trip {} with {} failed", event.tripId, event.agent, it) }
+        val review = runCatching { agent.review(event.tripId) }
+            .onFailure { log.error("Review of trip {} failed", event.tripId, it) }
             .getOrNull()
 
         reviews.save(
             TripReview(
                 tripId = event.tripId,
-                agent = event.agent,
                 verdict = review?.verdict,
                 summary = review?.summary ?: "Review failed - see logs",
                 violations = review?.violations.orEmpty(),
@@ -43,7 +40,7 @@ class ReviewJob(
             )
         )
         trips.updateStatus(event.tripId, review?.verdict?.toStatus() ?: TripStatus.REVIEW_FAILED)
-        log.info("Trip {} reviewed by {}: {}", event.tripId, event.agent, review?.verdict)
+        log.info("Trip {} reviewed: {}", event.tripId, review?.verdict)
     }
 
     private fun Verdict.toStatus() = when (this) {

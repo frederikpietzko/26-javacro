@@ -1,7 +1,6 @@
 package com.example.travel.trip
 
 import com.example.travel.fakes.*
-import com.example.travel.review.ReviewAgent
 import com.example.travel.review.TripSubmitted
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.params.ParameterizedTest
@@ -74,20 +73,20 @@ class TripServiceTest {
     inner class Submitting {
 
         @Test
-        fun `freezes the trip and queues a review for the chosen agent`() {
+        fun `freezes the trip and queues a review`() {
             val id = world.violatingTrip()
 
-            val trip = service.submit(id, ReviewAgent.KOOG)
+            val trip = service.submit(id)
 
             assertEquals(TripStatus.SUBMITTED, trip.status)
             assertNotNull(trip.submittedAt)
-            assertEquals(listOf<Any>(TripSubmitted(id, ReviewAgent.KOOG)), world.events.published)
+            assertEquals(listOf<Any>(TripSubmitted(id)), world.events.published)
         }
 
         @Test
         fun `a submitted trip can no longer be changed`() {
             val id = world.violatingTrip()
-            service.submit(id, ReviewAgent.KOOG)
+            service.submit(id)
 
             val error = assertFailsWith<ResponseStatusException> { service.addTrain(id, aTrain()) }
 
@@ -97,9 +96,9 @@ class TripServiceTest {
         @Test
         fun `a submitted trip cannot be submitted twice`() {
             val id = world.violatingTrip()
-            service.submit(id, ReviewAgent.KOOG)
+            service.submit(id)
 
-            assertFailsWith<ResponseStatusException> { service.submit(id, ReviewAgent.KOOG) }
+            assertFailsWith<ResponseStatusException> { service.submit(id) }
 
             assertEquals(1, world.events.published.size)
         }
@@ -110,7 +109,7 @@ class TripServiceTest {
             val id = world.violatingTrip()
             service.updateStatus(id, status)
 
-            val trip = service.submit(id, ReviewAgent.KOOG)
+            val trip = service.submit(id)
 
             assertEquals(TripStatus.SUBMITTED, trip.status)
         }

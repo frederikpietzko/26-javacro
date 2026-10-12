@@ -1,6 +1,5 @@
 package com.example.travel.trip
 
-import com.example.travel.review.ReviewAgent
 import com.example.travel.review.TripSubmitted
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
@@ -143,11 +142,11 @@ class TripService(
      * The hand-over point: the trip is frozen and a review job is queued.
      * The actual review runs asynchronously once this transaction commits.
      */
-    fun submit(id: Long, agent: ReviewAgent): Trip {
+    fun submit(id: Long): Trip {
         val trip = editable(id)
         trip.status = TripStatus.SUBMITTED
         trip.submittedAt = Instant.now()
-        events.publishEvent(TripSubmitted(id, agent))
+        events.publishEvent(TripSubmitted(id))
         return trip
     }
 

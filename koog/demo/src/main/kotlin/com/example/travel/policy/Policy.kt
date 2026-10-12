@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
-/** A travel policy is just text - the agents have to interpret it. */
+/** A travel policy is just text - the agent has to interpret it. */
 @Entity
 class Policy(
     var title: String,

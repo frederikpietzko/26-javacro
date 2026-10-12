@@ -42,7 +42,7 @@ data class PolicyText(val id: Long, val title: String, val text: String)
 data class CostBreakdown(val hotelNights: Long, val hotels: Double, val flights: Double, val trains: Double, val total: Double, val currency: String)
 
 /**
- * Framework-agnostic facts the agents can look up - to be exposed as tools.
+ * Facts the agent can look up - to be exposed as Koog tools.
  */
 @Service
 @Transactional(readOnly = true)

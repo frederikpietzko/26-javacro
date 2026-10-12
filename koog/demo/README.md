@@ -9,11 +9,11 @@ What is already there:
 - `trip/`, `policy/` - domain, REST API and `TripService`
 - `review/TravelFacts.kt` - trip snapshot, policies and cost breakdown, ready to expose as tools
 - `review/Prompts.kt` - reviewer and judge prompts
-- `review/ReviewJob.kt` - runs the `TripReviewer` for `ReviewAgent.KOOG` after submit and stores the outcome
-- `review/koog/KoogConfig.kt` - Koog `PromptExecutor` backed by Spring AI's `ChatModel`
+- `review/ReviewJob.kt` - runs `TripReviewAgent` after submit and stores the outcome
+- `review/KoogConfig.kt` - Koog `PromptExecutor` backed by Spring AI's `ChatModel`
 
-What is missing: a `@Component` implementing `TripReviewer` with `agent = ReviewAgent.KOOG`.
-Until it exists, a submitted trip ends up as `REVIEW_FAILED`.
+What is missing: the body of `review/TripReviewAgent.kt`. Until it is written, a submitted trip ends up as
+`REVIEW_FAILED`.
 
 ## Versions
 
@@ -22,8 +22,7 @@ Spring Boot 4.1.1, Spring AI 2.1.0-M1 (Responses API), Koog 1.3.0
 
 ## Run
 
-Credentials (`OPENAI_BASE_URL`, `OPENAI_API_KEY`) are read from `.env`, `../.env` or
-`../../the-rise-of-jvm-agents/.env`.
+Credentials (`OPENAI_BASE_URL`, `OPENAI_API_KEY`) are read from `.env`.
 
 ```bash
 ./gradlew bootRun

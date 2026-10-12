@@ -1,6 +1,5 @@
 package com.example.travel.trip
 
-import com.example.travel.review.ReviewAgent
 import com.example.travel.review.TripReview
 import com.example.travel.review.TripReviewRepository
 import org.springframework.http.HttpStatus
@@ -30,11 +29,10 @@ class TripController(
     @ResponseStatus(HttpStatus.NO_CONTENT)
     fun delete(@PathVariable id: Long) = service.delete(id)
 
-    /** Submits the trip and queues a review by the chosen agent. */
+    /** Submits the trip and queues a review by the agent. */
     @PostMapping("/{id}/submit")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    fun submit(@PathVariable id: Long, @RequestParam(defaultValue = "KOOG") agent: ReviewAgent): Trip =
-        service.submit(id, agent)
+    fun submit(@PathVariable id: Long): Trip = service.submit(id)
 
     @GetMapping("/{id}/reviews")
     fun reviews(@PathVariable id: Long): List<TripReview> = reviews.findByTripIdOrderByCreatedAtDesc(id)
