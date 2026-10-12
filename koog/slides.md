@@ -5,6 +5,7 @@ class: text-center
 drawings:
   persist: false
 transition: fade
+routerMode: hash
 comark: true
 duration: 45min
 highlighter: shiki
