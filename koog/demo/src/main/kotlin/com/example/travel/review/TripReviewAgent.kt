@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component
 class TripReviewAgent(
     private val executor: PromptExecutor,
     private val facts: TravelFacts,
+    private val langfuse: LangfuseProperties
 ) {
 
     fun review(tripId: Long): ReviewOutcome = TODO("Build the Koog agent")

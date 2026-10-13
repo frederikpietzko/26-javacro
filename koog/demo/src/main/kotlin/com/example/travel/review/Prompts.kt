@@ -23,7 +23,7 @@ object Prompts {
         Return the result as structured output
     """
 
-    fun review(tripId: Long) = "Review trip with id $tripId."
+    fun review(tripId: Long) = "Review trip with id $tripId and check if it is in compnay policies."
 
     fun revise(tripId: Long, draft: ReviewOutcome, judgement: Judgement) = revise(tripId, draft, judgement.feedback)
 
