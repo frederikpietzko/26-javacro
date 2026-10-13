@@ -30,6 +30,50 @@ Credentials (`OPENAI_BASE_URL`, `OPENAI_API_KEY`) are read from `.env`.
 
 Two trips are seeded: trip `1` complies with every policy, trip `2` breaks several. See `requests.http`.
 
+## Observability - Koog traces in Langfuse
+
+`docker-compose.yml` is Langfuse's own [compose file](https://github.com/langfuse/langfuse/blob/main/docker-compose.yml)
+with the headless-init variables pre-filled, so org, project, API keys and login exist right after startup:
+
+```bash
+docker compose up -d        # first start takes a minute - wait for http://localhost:3000
+```
+
+Login: `demo@javacro.local` / `javacro-demo` - project **Travel Policy Demo**.
+
+`TripReviewAgent` already gets `LangfuseProperties` (`koog.langfuse.*`) injected. To paste into the agent builder:
+
+```kotlin
+AIAgent(promptExecutor = executor, strategy = ..., agentConfig = ..., toolRegistry = ...) {
+    if (langfuse.enabled) install(OpenTelemetry) {
+        setServiceInfo("koog-travel-policy-demo", "0.0.1")
+        setVerbose(langfuse.verbose)
+        // one SDK per agent run - flush and shut it down when the run ends
+        setShutdownOnAgentClose(true)
+        addLangfuseExporter(langfuse.host, langfuse.publicKey, langfuse.secretKey)
+    }
+}
+```
+
+Imports: `ai.koog.agents.features.opentelemetry.feature.OpenTelemetry` and
+`ai.koog.agents.features.opentelemetry.integration.langfuse.addLangfuseExporter`.
+
+Host and keys default to the compose values, so the flag is all you need. System properties to paste:
+
+```bash
+# Gradle - koog.* system properties are forwarded to the app
+./gradlew bootRun -Dkoog.langfuse.enabled=true
+
+# everything explicit (IntelliJ run configuration -> VM options)
+-Dkoog.langfuse.enabled=true -Dkoog.langfuse.host=http://localhost:3000 -Dkoog.langfuse.public-key=pk-lf-javacro-demo -Dkoog.langfuse.secret-key=sk-lf-javacro-demo -Dkoog.langfuse.verbose=true
+```
+
+Then `curl -X POST localhost:8080/api/trips/2/submit` and open Tracing in Langfuse: one trace per review, with spans
+for every node, LLM call (prompt, completion, tokens) and tool call. `koog.langfuse.verbose=false` keeps prompt and
+completion contents out of the spans.
+
+`docker compose down -v` removes Langfuse together with its data.
+
 ## Tests
 
 ```bash

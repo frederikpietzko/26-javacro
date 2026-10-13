@@ -19,6 +19,10 @@ object Prompts {
         from the violations. Accept only if the draft is correct. Otherwise give concrete feedback.
     """
 
+    const val STRUCTURED = """
+        Return the result as structured output
+    """
+
     fun review(tripId: Long) = "Review trip with id $tripId."
 
     fun revise(tripId: Long, draft: ReviewOutcome, judgement: Judgement) = revise(tripId, draft, judgement.feedback)

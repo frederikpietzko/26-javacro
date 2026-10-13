@@ -79,3 +79,8 @@ powerAssert {
 tasks.withType<Test> {
     useJUnitPlatform()
 }
+
+// forward -Dkoog.* from the Gradle command line, e.g. ./gradlew bootRun -Dkoog.langfuse.enabled=true
+tasks.bootRun {
+    systemProperties(System.getProperties().filterKeys { it.toString().startsWith("koog.") }.mapKeys { it.key.toString() })
+}

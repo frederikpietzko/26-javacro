@@ -590,7 +590,7 @@ install(Persistence) {
 ```
 
 ```kotlin no-compile
-context.persistence().rollbackToLatestCheckpoint(context)
+context.persistence().rollbackToCheckpoint(checkpointId, context)
 ```
 
 <!--

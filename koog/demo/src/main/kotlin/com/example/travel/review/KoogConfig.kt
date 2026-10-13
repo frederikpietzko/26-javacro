@@ -5,6 +5,8 @@ import ai.koog.prompt.executor.model.PromptExecutor
 import ai.koog.prompt.llm.LLMProvider
 import ai.koog.spring.ai.chat.SpringAiLLMClient
 import org.springframework.ai.chat.model.ChatModel
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Configuration
  * OpenAiResponsesChatAutoConfiguration, so we wire the bridge explicitly.
  */
 @Configuration
+@EnableConfigurationProperties(LangfuseProperties::class)
 class KoogConfig {
 
     @Bean
@@ -26,3 +29,17 @@ class KoogConfig {
             .build()
     )
 }
+
+/**
+ * Koog's OpenTelemetry feature exporting to Langfuse - off unless `koog.langfuse.enabled=true`.
+ * Defaults match the local `docker-compose.yml` (headless init project keys).
+ */
+@ConfigurationProperties("koog.langfuse")
+data class LangfuseProperties(
+    val enabled: Boolean = false,
+    val host: String = "http://localhost:3000",
+    val publicKey: String = "pk-lf-javacro-demo",
+    val secretKey: String = "sk-lf-javacro-demo",
+    // verbose: prompts, completions and tool arguments end up in the spans
+    val verbose: Boolean = true,
+)
